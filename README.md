@@ -29,6 +29,5 @@ Optimize the app for fast loading and smooth performance.
 8. Privacy & Security
 Protect user data and privacy in accordance with relevant laws and
 regulations.
-Deadline
-Submission Date: Wednesday, 11 September 2024 by 08:00
+
 </p>
