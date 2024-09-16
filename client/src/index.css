@@ -1,40 +1,37 @@
-
-*{
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
 body {
-    font-family: 'Outfit', 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans','Helvet'
-    sans-serif;
-    -webkit-font-smoothing : antialiased;
-    -moz-osx-font-smoothing : grayscale;
-
-
+    font-family: 'Outfit', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.4);
 }
-p {
-    font-size: 1.6rem;
 
+p {
+    font-size: 1rem;
 }
 
 h1 {
-    font-size: 5rem;
+    font-size: 2rem;
 }
 
 .app {
     width: 100%;
     height: 100vh;
-    position : relative;
+    position: relative;
     background-color: rgba(0, 0, 0, 0.4);
     color: white;
-
+    overflow: hidden;
 }
 
-.app::before{
+.app::before {
     content: "";
-    background: url('./assets/wallpare.jpg') no-repeat center center/cover;
+    background: url('./assets/wallpaper.jpg') no-repeat center center/cover;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -42,108 +39,101 @@ h1 {
     left: 0;
     z-index: -1;
 }
-.app .search {
+
+.search {
     text-align: center;
     padding: 1rem;
 }
 
-.app input {
-    padding: .7rem 1.5rem;
-    font-size: 1.2rem;
+input {
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
     border-radius: 25px;
-    border: 1px solid rgba(255, 255,  255, 0.8);
-    background: rgba(255, 255, 255, 0.1);
-
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    background: #ffffff1a;
+    color: black;
+    text-align: center;
 }
+
 ::placeholder {
-    color: #f8f8f8
+    color: black;
 }
 
 .container {
-    max-width:  700px;
-
-    height: 700px;
+    max-width: 1400px;
+    height: calc(100% - 40px); /* Adjust height to fit within the viewport */
     margin: auto;
-    padding: 0 1rem;
+    padding: 1rem;
     position: relative;
-    top: 10%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-image: url(./assets/wall1.avif);
+    border-radius: 10px;
+    margin-top: 20px;
 }
 
-.app .top {
-    width: 100%;
-    margin: 1rem auto;
-}
-
-.app .description {
-    position: relative;
-    right: -90%;
-    margin-bottom: -50px;
-
-}
-
-
-.app .botton{
-    display: flex;
-    justify-content: space-evenly;
+.top {
     text-align: center;
-    width: 100%;
-    margin: 1rem auto;
-    padding: 1rem;
-    border-radius: 12px;
-    background-color: rgba(225,255,255, 0.2);
+    margin-bottom: 1rem;
 }
 
-.bold{
-    font-weight: 700;
+.description {
+    margin-bottom: 1rem;
 }
+
 .bottom {
     display: flex;
-    /* flex-wrap: wrap; */
+    flex-wrap: wrap;
     justify-content: space-around;
-    /* margin: 10px; */
-    margin-left: -370px;
-  }
-  
-  .weather-card {
+    gap: 10px;
+    margin-top: 130px;
+}
+
+.weather-card {
     border: 1px solid #ddd;
     padding: 10px;
-    margin: 5px;
     width: 150px;
-    border-radius: 5px;
-    text-align: center;
-    background-color: #f9f9f9;
-  }
-  .bottom {
-    display: flex;
-    /* flex-wrap: wrap; */
-    justify-content: space-around;
-    /* align-items: flex-start; */
-    gap: 10px; /* Space between cards */
-    padding: 10px;
-    margin-top: -40px;
-  }
-  
-  .weather-card {
-    border: 1px solid #ddd;
-    padding: 20px;
-    width: 180px;
-    color: white;
-    height: 290px;
     border-radius: 15px;
     text-align: center;
-    background-color: rgba(255, 217, 0, 0.199);
+    background-color: rgba(255, 217, 0, 0.2);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    flex: 0 0 auto; /* Prevent flex items from shrinking */
-    /* margin-top: -150px; */
-    box-shadow: 0 4px 8px rgba(255, 215, 0, 0.5); /* Gold box-shadow */
-    margin-bottom: 100px;
-  }
-  
-  
-  .weather-card p {
-    margin: 10px 0;
-  }
-  
+    color: white;
+}
+
+.saved-locations {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.saved-locations button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 15px;
+    color: white;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    cursor: pointer;
+}
+
+.saved-locations button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.unit-toggle {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.unit-toggle button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 15px;
+    color: white;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.unit-toggle button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
