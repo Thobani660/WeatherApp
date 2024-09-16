@@ -1,159 +1,158 @@
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-
-// const API_KEY = 'YOUR_ACTUAL_OPENWEATHERMAP_API_KEY';const lat = 51.5074; // Replace with your latitude
-// const lon = -0.1278; // Replace with your longitude
-
-// const App = () => {
-//   const [currentWeather, setCurrentWeather] = useState(null);
-//   const [hourlyWeather, setHourlyWeather] = useState([]); // Update this line
-
-//   useEffect(() => {
-//     fetchWeatherData();
-//   }, []);
-
-//   const fetchWeatherData = async () => {
-//     try {
-//       // Fetch hourly weather forecast using Hourly Forecast API
-//       const response = await axios.get(`https://pro.openweathermap.org/data/2.5/forecast/hourly?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`);
-//       setCurrentWeather({
-//         name: 'London',
-//         temp: response.data.list[0].main.temp,
-//         description: response.data.list[0].weather[0].description,
-//       });
-//       setHourlyWeather(response.data.list);
-//     } catch (error) {
-//       console.error('Error fetching weather data:', error);
-//     }
-//   };
-
-//   const appStyle = {
-//     display: 'flex',
-//     flexDirection: 'column',
-//     alignItems: 'center',
-//     margin: '20px',
-//     fontFamily: 'Arial, sans-serif',
-//   };
-
-//   const currentWeatherStyle = {
-//     margin: '10px',
-//     padding: '20px',
-//     border: '1px solid #ddd',
-//     borderRadius: '5px',
-//     textAlign: 'center',
-//   };
-
-//   const weeklyWeatherStyle = {
-//     display: 'flex',
-//     flexWrap: 'wrap',
-//     justifyContent: 'space-around',
-//     margin: '10px',
-//   };
-
-//   const weatherCardStyle = {
-//     border: '1px solid #ddd',
-//     padding: '10px',
-//     margin: '5px',
-//     width: '150px',
-//     borderRadius: '5px',
-//     textAlign: 'center',
-//     backgroundColor: '#f9f9f9',
-//   };
-
-//   return (
-//     <div style={appStyle}>
-//       <div style={currentWeatherStyle}>
-//         {currentWeather ? (
-//           <div>
-//             <h2>{currentWeather.name}</h2>
-//             <p>Temperature: {Math.round(currentWeather.temp)}°C</p>
-//             <p>Condition: {currentWeather.description}</p>
-//           </div>
-//         ) : (
-//           <p>Loading current weather...</p>
-//         )}
-//       </div>
-//       <div style={weeklyWeatherStyle}>
-//         {hourlyWeather.length > 0 ? ( // Update this line
-//           hourlyWeather.map((day, index) => ( // Update this line
-//             <div key={index} style={weatherCardStyle}>
-//               <h3>{new Date(day.dt * 1000).toLocaleDateString()}</h3>
-//               <p>Temperature: {Math.round(day.temp.day)}°C</p>
-//               <p>Condition: {day.weather[0].description}</p>
-//             </div>
-//           ))
-//         ) : (
-//           <p>Loading weekly weather...</p>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default App;
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import './App.css';
 
-function App(){
-
+function App() {
   const [data, setData] = useState({});
-  const [location,  setLocation] = useState("");
+  const [dailyWeather, setDailyWeather] = useState([]);
+  const [location, setLocation] = useState("");
+  const [savedLocations, setSavedLocations] = useState([]);
+  const [unit, setUnit] = useState("imperial");
+  const [weatherAlert, setWeatherAlert] = useState(null);
 
-  const url = `https://api.openweathermap.org/data/2.5/weather?p=dallas&appid=0d60273acd621b755f1317978b6f426a`
-   const searchLocation =  async () => {
-    if (event.key  === 'Enter') {
+  const apiKey = '235407757cdf98cace4e2245ea49690a';
 
-    axios.get(url).then((response) => {
-      setData(response.data);
-      console.log(response.data);
-    })
-    setLocation('')
-  }
+  useEffect(() => {
+    if (location) {
+      fetchWeatherData();
     }
+  }, [location, unit]);
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords;
+      fetchWeatherDataByCoords(latitude, longitude);
+    });
+  }, []);
+
+  const fetchWeatherData = async () => {
+    const url = `https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${apiKey}&units=${unit}`;
+
+    try {
+      const response = await axios.get(url);
+      const filteredData = response.data.list.filter((forecast, index) => index % 8 === 0);
+      setData(response.data);
+      setDailyWeather(filteredData);
+      setWeatherAlert(response.data.alerts?.[0] || null);
+      localStorage.setItem(location, JSON.stringify(filteredData));
+    } catch (error) {
+      console.error('Error fetching weather data:', error);
+    }
+  };
+
+  const fetchWeatherDataByCoords = async (lat, lon) => {
+    const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly&appid=${apiKey}&units=${unit}`;
+
+    try {
+      const response = await axios.get(url);
+      const filteredData = response.data.daily.slice(0, 7);
+      setData(response.data);
+      setDailyWeather(filteredData);
+      setWeatherAlert(response.data.alerts?.[0] || null);
+    } catch (error) {
+      console.error('Error fetching weather data by coordinates:', error);
+    }
+  };
+
+  const searchLocation = (event) => {
+    if (event.key === 'Enter') {
+      fetchWeatherData();
+      saveLocation(location);
+      setLocation('');
+    }
+  };
+
+  const saveLocation = (loc) => {
+    setSavedLocations((prev) => [...new Set([...prev, loc])]);
+  };
+
+  const toggleUnit = () => {
+    setUnit((prevUnit) => (prevUnit === 'imperial' ? 'metric' : 'imperial'));
+  };
+
+  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+  // Get weather icon URL based on OpenWeatherMap's icon code
+  const getIconUrl = (iconCode) => `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
 
   return (
-  <div className="app">
-    <div className="search">
-      <input 
-      value={location}
-      onChange={(e) => setLocation(e.target.value)}
-      onKeyPress={searchLocation}
-      placeholder="Enter  location"
-      type="text"
-      />
+    <div className="app">
+      <div className="search">
+        <input
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          onKeyPress={searchLocation}
+          placeholder="Enter location"
+          type="text"
+        />
+      </div>
+      
+      {weatherAlert && (
+        <div className="alert">
+          <h3>Weather Alert</h3>
+          <p>{weatherAlert.description}</p>
+        </div>
+      )}
 
-    </div>
-    <div className="container">
-      <div className="top">
-        <div className="location">
-          <p>London</p>
-          <div className="temp">
-            <h1>60 F</h1>
+      <div className="container">
+        <div className="top">
+          <div className="location">
+            <p>{data.city?.name}</p>
+            <div className="temp">
+              <h1>{Math.round(dailyWeather[0]?.main.temp || 0)}°{unit === 'imperial' ? 'F' : 'C'}</h1>
+              <p>Humidity: {dailyWeather[0]?.main.humidity || 0}%</p>
+              <p>Wind Speed: {dailyWeather[0]?.wind.speed || 0} {unit === 'imperial' ? 'mph' : 'm/s'}</p>
+            </div>
+            <div className="description" style={{marginTop:"-30px"}}>
+              <p>{dailyWeather[0]?.weather[0]?.description || 'No description'}</p>
+              {/* Display icon for current weather */}
+              {dailyWeather[0]?.weather[0]?.icon && (
+                <img src={getIconUrl(dailyWeather[0].weather[0].icon)} alt="Weather icon" />
+              )}
+            </div>
           </div>
-          <div className="description">
-            <p>clouds</p>
-          </div>
+        </div>
+
+        <div className="bottom">
+          {dailyWeather.length > 0 ? (
+            dailyWeather.map((day, index) => (
+              <div key={index} className="weather-card">
+                 {day.weather[0].icon && (
+                  <img src={getIconUrl(day.weather[0].icon)} alt="Weather icon" />
+                )}
+                <h3>{daysOfWeek[(new Date(day.dt * 1000).getDay())]}</h3>
+                <p>Temperature: {Math.round(day.main.temp)}°{unit === 'imperial' ? 'F' : 'C'}</p>
+                <p>Condition: {day.weather[0].description}</p>
+              
+               
+              </div>
+            ))
+          ) : (
+            daysOfWeek.map((day, index) => (
+              <div key={index} className="weather-card">
+                <h3>{day}</h3>
+                <p>Temperature: 0°F</p>
+                <p>Condition: No data</p>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
-      <div className="bottom">
-        <div className="feels">
-          <p className="bold">65 F</p>
-          <p>Feels like</p>
-        </div>
+      <div className="saved-locations">
+        <h3>Saved Locations</h3>
+        {savedLocations.map((loc, index) => (
+          <button key={index} onClick={() => setLocation(loc)}>
+            {loc}
+          </button>
+        ))}
+      </div>
 
-        <div className="humidity">
-          <p className="bold">20%</p>
-          <p>Humidity</p>
-        </div>
-
-        <div className="wind">
-          <p className="bold">12 MPH</p>
-          <p>Wind Speed</p>
-        </div>
+      <div className="unit-toggle">
+        <button onClick={toggleUnit}>Switch to {unit === 'imperial' ? 'Celsius' : 'Fahrenheit'}</button>
       </div>
     </div>
+  );
+}
 
-  </div>
-)}
-export default App
+export default App;
