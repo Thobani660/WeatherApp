@@ -4,30 +4,13 @@
    Weather App that provides real-time weather information and various user-
 friendly features
 </h4>
-
+<h1>clone: https://github.com/Thobani660/WeatherApp</h1>
+<h4>from WeatherApp -cd client</h4>
+<h1>dependencies to install</h1>
 <p>
-   Real-time Weather Info
-Display current weather conditions (temperature, humidity, wind speed,
-etc.).
-Provide hourly and daily weather forecasts.
-2. Location-Based Forecasting
-Allow users to set their location or automatically detect it.
-Provide weather information for the user's current location.
-3. Weather Alerts
-Send push notifications for severe weather alerts in the user's
-location.
-4. Multiple Locations
-Allow users to save and switch between multiple locations for weather
-information.
-5. Customization
-Allow users to customize the app's theme or display units (e.g., Celsius
-vs. Fahrenheit).
-6. Offline Access
-Provide cached weather data for offline access.
-7. Performance
-Optimize the app for fast loading and smooth performance.
-8. Privacy & Security
-Protect user data and privacy in accordance with relevant laws and
-regulations.
-
+   "axios": "^1.7.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
 </p>
+<h1>To run this app: npm run dev</h1>
+<h6></h6>
