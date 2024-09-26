@@ -15,7 +15,7 @@ function App() {
   const apiKey = '235407757cdf98cace4e2245ea49690a';
 
   useEffect(() => {
-    
+    // Load saved locations 
     const savedLocationsFromStorage = JSON.parse(localStorage.getItem('savedLocations'));
     if (savedLocationsFromStorage) {
       setSavedLocations(savedLocationsFromStorage);
@@ -27,6 +27,7 @@ function App() {
     });
   }, []);
 
+  // enpoi
   useEffect(() => {
     if (location) {
       fetchWeatherData();
