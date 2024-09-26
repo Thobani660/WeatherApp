@@ -15,7 +15,7 @@ function App() {
   const apiKey = '235407757cdf98cace4e2245ea49690a';
 
   useEffect(() => {
-
+    // Load saved locations from localStorage when the component mounts
     const savedLocationsFromStorage = JSON.parse(localStorage.getItem('savedLocations'));
     if (savedLocationsFromStorage) {
       setSavedLocations(savedLocationsFromStorage);
@@ -38,10 +38,10 @@ function App() {
 
     try {
       const response = await axios.get(url);
-      const filteredData = response.data.list.filter((forecast, index) => index % 8 === 0); 
+      const filteredData = response.data.list.filter((forecast, index) => index % 8 === 0); // Daily data
       setData(response.data);
       setDailyWeather(filteredData);
-      setHourlyWeather(response.data.list.slice(0, 8));
+      setHourlyWeather(response.data.list.slice(0, 8)); // First 8 data points for today's hourly forecast (3-hour intervals)
       setWeatherAlert(response.data.alerts?.[0] || null);
       localStorage.setItem(location, JSON.stringify(filteredData));
       setCurrentLocationWeather(null);
@@ -71,8 +71,8 @@ function App() {
   };
 
   const saveLocation = (loc) => {
-    // location in the state and  in localStorage
-    const updatedLocations = [...new Set([...savedLocations, loc])]; 
+    // Save the location in the state and also in localStorage
+    const updatedLocations = [...new Set([...savedLocations, loc])]; // Ensures unique locations
     setSavedLocations(updatedLocations);
     localStorage.setItem('savedLocations', JSON.stringify(updatedLocations));
   };
@@ -92,7 +92,7 @@ function App() {
 
   return (
     <div className="app">
-      <div className="container" style={{ border: "2px solid lightyellow" }}>
+      <div className="container" style={{ border: "2px solid lightyellow", boxShadow: "2px 6px 8px 0 gold"  }}>
         <div className="search" style={{ color: "white" }}>
           <input
             value={location}
@@ -105,19 +105,20 @@ function App() {
           />
         </div>
 
-        {/*  searched locations */}
-        {savedLocations.length > 0 && (
-          <div className="saved-locations">
-            <h4 style={{ color: "gold" }}>Saved Locations</h4>
-            <ul>
-              {savedLocations.map((loc, index) => (
-                <li key={index} onClick={() => setLocation(loc)} style={{ cursor: 'pointer', color: "white" }}>
-                  {loc}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+{savedLocations.length > 0 && (
+  <div className="saved-locations">
+    <h4 style={{ color: "gold",marginTop:"-40px" }}>Saved Locations</h4>
+    <ul>
+      {savedLocations.slice(-2).map((loc, index) => (
+        <li key={index} onClick={() => setLocation(loc)} style={{ cursor: 'pointer', color: "white" ,listStyle:"none"}}>
+          {loc}
+          <button onClick={() => deleteLocation(loc)} style={{ marginLeft: '100px', color: 'red' }}><h6>X</h6></button> {/* Remove button */}
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
 
         {weatherAlert && (
           <div className="alert">
@@ -190,7 +191,7 @@ function App() {
                   <img
                     src={getIconUrl(day.weather[0].icon)}
                     alt="Weather icon"
-                    style={{ width: "40px", height: "40px" }} 
+                    style={{ width: "40px", height: "40px" }} // Icon size adjusted here
                   />
                 )}
                 <h3>{daysOfWeek[(new Date(day.dt * 1000).getDay())]}</h3>
@@ -206,7 +207,7 @@ function App() {
                     <img
                       src={getIconUrl(day.weather[0].icon)}
                       alt="Weather icon"
-                      style={{ width: "30px", height: "30px" }} 
+                      style={{ width: "30px", height: "30px" }} // Icon size adjusted here
                     />
                   )}
                   <h5>{daysOfWeek[(new Date(day.dt * 1000).getDay())]}</h5>

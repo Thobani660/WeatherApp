@@ -72,7 +72,9 @@ input {
     background-image: url(./assets/to2.avif);
     border-radius: 10px;
     margin-top: 20px;
-    box-shadow: 0 4px 8px rgba(201, 148, 4, 0.89)
+    box-shadow: 0 4px 8px rgba(201, 148, 4, 0.89);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .top {
