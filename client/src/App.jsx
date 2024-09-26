@@ -15,7 +15,7 @@ function App() {
   const apiKey = '235407757cdf98cace4e2245ea49690a';
 
   useEffect(() => {
-    // Load saved locations from localStorage when the component mounts
+    
     const savedLocationsFromStorage = JSON.parse(localStorage.getItem('savedLocations'));
     if (savedLocationsFromStorage) {
       setSavedLocations(savedLocationsFromStorage);
@@ -38,10 +38,10 @@ function App() {
 
     try {
       const response = await axios.get(url);
-      const filteredData = response.data.list.filter((forecast, index) => index % 8 === 0); // Daily data
+      const filteredData = response.data.list.filter((forecast, index) => index % 8 === 0); 
       setData(response.data);
       setDailyWeather(filteredData);
-      setHourlyWeather(response.data.list.slice(0, 8)); // First 8 data points for today's hourly forecast (3-hour intervals)
+      setHourlyWeather(response.data.list.slice(0, 8)); 
       setWeatherAlert(response.data.alerts?.[0] || null);
       localStorage.setItem(location, JSON.stringify(filteredData));
       setCurrentLocationWeather(null);
@@ -71,8 +71,7 @@ function App() {
   };
 
   const saveLocation = (loc) => {
-    // Save the location in the state and also in localStorage
-    const updatedLocations = [...new Set([...savedLocations, loc])]; // Ensures unique locations
+    const updatedLocations = [...new Set([...savedLocations, loc])];
     setSavedLocations(updatedLocations);
     localStorage.setItem('savedLocations', JSON.stringify(updatedLocations));
   };
@@ -112,7 +111,7 @@ function App() {
       {savedLocations.slice(-2).map((loc, index) => (
         <li key={index} onClick={() => setLocation(loc)} style={{ cursor: 'pointer', color: "white" ,listStyle:"none"}}>
           {loc}
-          <button onClick={() => deleteLocation(loc)} style={{ marginLeft: '100px', color: 'red' }}><h6>X</h6></button> {/* Remove button */}
+          <button onClick={() => deleteLocation(loc)} style={{ marginLeft: '100px', color: 'red' }}><h6>X</h6></button> 
         </li>
       ))}
     </ul>
@@ -191,7 +190,7 @@ function App() {
                   <img
                     src={getIconUrl(day.weather[0].icon)}
                     alt="Weather icon"
-                    style={{ width: "40px", height: "40px" }} // Icon size adjusted here
+                    style={{ width: "40px", height: "40px" }} 
                   />
                 )}
                 <h3>{daysOfWeek[(new Date(day.dt * 1000).getDay())]}</h3>
@@ -207,7 +206,7 @@ function App() {
                     <img
                       src={getIconUrl(day.weather[0].icon)}
                       alt="Weather icon"
-                      style={{ width: "30px", height: "30px" }} // Icon size adjusted here
+                      style={{ width: "30px", height: "30px" }}
                     />
                   )}
                   <h5>{daysOfWeek[(new Date(day.dt * 1000).getDay())]}</h5>
